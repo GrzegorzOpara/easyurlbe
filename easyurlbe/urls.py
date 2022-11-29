@@ -1,4 +1,4 @@
-"""easyurl URL Configuration
+"""easyurlbe URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.2/topics/http/urls/
@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from easyurl_backend import urls as easyurlbackend_urls
+from api import urls as api
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
@@ -26,5 +26,5 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls')), # login button
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('api/', include(easyurlbackend_urls)),
+    path('api/', include(api)),
 ]
