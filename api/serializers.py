@@ -4,4 +4,4 @@ from .models import UrlEntry
 class UrlEntrySerializer(serializers.ModelSerializer):
     class Meta:
         model = UrlEntry
-        fields = ['url_name', 'url_link', 'url_desc', 'user']
+        fields = ['id', 'url_name', 'url_link', 'url_desc', 'user']
