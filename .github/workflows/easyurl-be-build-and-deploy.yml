@@ -39,6 +39,11 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: Check variables
+        shell: bash
+        run: |
+          echo "SECRET_KEY: $SECRET_KEY"
+
       # We add collectstatic to take care of our static files during the Actions run
       # This is not added by default in the generated template, so we include this ourselves
       - name: Collect static
