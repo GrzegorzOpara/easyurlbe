@@ -1,1 +1,84 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+# More info on Python, GitHub Actions, and Azure App Service: https://aka.ms/python-webapps-actions
 
+name: Build and deploy - easyurlbe
+
+on:
+  #push:
+  #  branches:
+  #    - main
+  workflow_dispatch:
+
+env:
+  # WEBSITE_HOSTNAME: $
+  SECRET_KEY: ${{ secrets.SECRET_KEY }}
+  DB_SERVER: ${{ secrets.DB_SERVER }}
+  DB_NAME: ${{ secrets.DB_NAME }}
+  DB_USER: ${{ secrets.DB_USER }}
+  DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+  # APP_NAME: "easyurlbe"
+
+environment: production
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python version
+        uses: actions/setup-python@v1
+        with:
+          python-version: '3.9'
+
+      - name: Create and start virtual environment
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+      
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      # We add collectstatic to take care of our static files during the Actions run
+      # This is not added by default in the generated template, so we include this ourselves
+      - name: Collect static
+        run: python manage.py collectstatic
+
+      # We add makemigrations and migrate to run our model/database migrations
+      # This is not added by default in the generated template, so we include this ourselves
+      - name: Make migrations and run migrations
+        run: |
+          python manage.py makemigrations --empty
+          python manage.py migrate $
+
+      - name: Upload artifact for deployment jobs
+        uses: actions/upload-artifact@v2
+        with:
+          name: python-app
+          path: |
+            . 
+            !venv/
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: 'Production'
+      # url: $
+
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v2
+        with:
+          name: python-app
+          path: .
+          
+      - name: 'Deploy to Azure Web App'
+        uses: azure/webapps-deploy@v2
+        id: deploy-to-webapp
+        with:
+          app-name: 'easyurlbe'
+          slot-name: 'Production'
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
