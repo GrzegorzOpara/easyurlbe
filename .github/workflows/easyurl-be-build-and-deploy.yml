@@ -55,8 +55,8 @@ jobs:
       # This is not added by default in the generated template, so we include this ourselves
       - name: Make migrations and run migrations
         run: |
-          python manage.py makemigrations --empty
-          python manage.py migrate $
+          python manage.py makemigrations
+          python manage.py migrate
 
       - name: Upload artifact for deployment jobs
         uses: actions/upload-artifact@v2
