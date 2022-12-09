@@ -23,7 +23,6 @@ jobs:
       DB_NAME: ${{ secrets.DB_NAME }}
       DB_USER: ${{ secrets.DB_USER }}
       DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-      # APP_NAME: "easyurlbe"
 
     steps:
       - uses: actions/checkout@v2
@@ -40,11 +39,6 @@ jobs:
       
       - name: Install dependencies
         run: pip install -r requirements.txt
-
-      - name: Check variables
-        shell: bash
-        run: |
-          echo "SECRET_KEY: $SECRET_KEY"
 
       # We add collectstatic to take care of our static files during the Actions run
       # This is not added by default in the generated template, so we include this ourselves
@@ -90,8 +84,9 @@ jobs:
         uses: azure/webapps-deploy@v2
         id: deploy-to-webapp
         with:
-          app-name: 'easyurlbe'
-          slot-name: 'Production'
+          app-name: 'webapp-easyurl-be-prod'
+          # https://webapp-easyurl-be-prod.azurewebsites.net
+          # slot-name: 'Production'
 
       - name: Azure Loout
         run: |
