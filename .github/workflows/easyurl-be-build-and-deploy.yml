@@ -19,8 +19,6 @@ env:
   DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
   # APP_NAME: "easyurlbe"
 
-environment: production
-
 jobs:
   build:
     runs-on: ubuntu-latest
