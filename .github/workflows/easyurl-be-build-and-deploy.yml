@@ -49,7 +49,7 @@ jobs:
       # We add collectstatic to take care of our static files during the Actions run
       # This is not added by default in the generated template, so we include this ourselves
       - name: Collect static
-        run: python manage.py collectstatic
+        run: python manage.py collectstatic --noinput
 
       # We add makemigrations and migrate to run our model/database migrations
       # This is not added by default in the generated template, so we include this ourselves
