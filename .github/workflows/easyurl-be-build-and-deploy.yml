@@ -86,7 +86,7 @@ jobs:
               { "name": "DB_NAME", "value": "${{ secrets.DB_NAME }}", "slotSetting": false },
               { "name": "DB_USER", "value": "${{ secrets.DB_USER }}", "slotSetting": false },
               { "name": "DB_PASSWORD", "value": "${{ secrets.DB_PASSWORD }}", "slotSetting": false }
-              { "name": "WEBSITE_ENABLE_SYNC_UPDATE_SITE", "value": "true", "slotSetting": false }
+              { "name": "WEBSITE_ENABLE_SYNC_UPDATE_SITE", "value": true, "slotSetting": false },
               ]'
         id: settings
       
