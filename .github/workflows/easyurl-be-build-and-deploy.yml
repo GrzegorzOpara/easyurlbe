@@ -78,7 +78,7 @@ jobs:
         with:
           app-name: 'webapp-easyurl-be-prod'
           mask-inputs: true
-          slot-name: 'staging'  # Optional and needed only if the settings have to be configured on the specific deployment slot
+          # slot-name: 'staging'  # Optional and needed only if the settings have to be configured on the specific deployment slot
           app-settings-json: '[
               { "name": "SCM_DO_BUILD_DURING_DEPLOYMENT", "value": "1", "slotSetting": false },
               { "name": "DB_NAME", "value": "${{ secrets.DB_NAME }}", "slotSetting": false }
