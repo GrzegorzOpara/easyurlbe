@@ -73,12 +73,12 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
       
-      - name: Set up add service app settings
+      - name: Set up app service settings
         uses: azure/appservice-settings@v1
         with:
           app-name: 'webapp-easyurl-be-prod'
           mask-inputs: true
-          # slot-name: 'staging'  # Optional and needed only if the settings have to be configured on the specific deployment slot
+          # slot-name: 'staging'
           app-settings-json: '[
               { "name": "SCM_DO_BUILD_DURING_DEPLOYMENT", "value": "1", "slotSetting": false },
               { "name": "SECRET_KEY", "value": "${{ secrets.SECRET_KEY }}", "slotSetting": false },
