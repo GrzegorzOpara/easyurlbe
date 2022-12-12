@@ -7,3 +7,4 @@ django-filter
 markdown
 djangorestframework-simplejwt
 datetime
+django-storages[azure]
