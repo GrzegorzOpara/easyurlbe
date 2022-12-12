@@ -23,6 +23,8 @@ jobs:
       DB_NAME: ${{ secrets.DB_NAME }}
       DB_USER: ${{ secrets.DB_USER }}
       DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      STATIC_AZURE_ACCOUNT_NAME: ${{ secrets.STATIC_AZURE_ACCOUNT_NAME }}
+      STATIC_AZURE_ACCOUNT_KEY: ${{ secrets.STATIC_AZURE_ACCOUNT_KEY }}
 
     steps:
       - uses: actions/checkout@v2
@@ -86,7 +88,9 @@ jobs:
               { "name": "DB_NAME", "value": "${{ secrets.DB_NAME }}", "slotSetting": false },
               { "name": "DB_USER", "value": "${{ secrets.DB_USER }}", "slotSetting": false },
               { "name": "DB_PASSWORD", "value": "${{ secrets.DB_PASSWORD }}", "slotSetting": false },
-              { "name": "WEBSITE_ENABLE_SYNC_UPDATE_SITE", "value": "1", "slotSetting": false }
+              { "name": "STATIC_AZURE_ACCOUNT_NAME", "value": "${{ secrets.STATIC_AZURE_ACCOUNT_NAME }}", "slotSetting": false },
+              { "name": "STATIC_AZURE_ACCOUNT_KEY", "value": "${{ secrets.STATIC_AZURE_ACCOUNT_KEY }}", "slotSetting": false },
+              { "name": "WEBSITE_ENABLE_SYNC_UPDATE_SITE", "value": "1", "slotSetting": false },
               ]'
         id: settings
       
