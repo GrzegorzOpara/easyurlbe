@@ -90,7 +90,7 @@ jobs:
               { "name": "DB_PASSWORD", "value": "${{ secrets.DB_PASSWORD }}", "slotSetting": false },
               { "name": "STATIC_AZURE_ACCOUNT_NAME", "value": "${{ secrets.STATIC_AZURE_ACCOUNT_NAME }}", "slotSetting": false },
               { "name": "STATIC_AZURE_ACCOUNT_KEY", "value": "${{ secrets.STATIC_AZURE_ACCOUNT_KEY }}", "slotSetting": false },
-              { "name": "WEBSITE_ENABLE_SYNC_UPDATE_SITE", "value": "1", "slotSetting": false },
+              { "name": "WEBSITE_ENABLE_SYNC_UPDATE_SITE", "value": "1", "slotSetting": false }
               ]'
         id: settings
       
