@@ -30,7 +30,8 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["localhost", "webapp-easyurl-be-prod.azurewebsites.net"]
+ALLOWED_HOSTS = os.environ.get('HOSTS').split(' ')
+CSRF_TRUSTED_ORIGINS = os.environ.get('HOSTS').split(' ')
 
 
 # Application definition
