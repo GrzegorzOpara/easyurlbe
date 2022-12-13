@@ -17,15 +17,18 @@ jobs:
       name: 'Production'
 
     env:
-      # WEBSITE_HOSTNAME: $
+      # DJANGO
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      # DB
       DB_SERVER: ${{ secrets.DB_SERVER }}
       DB_NAME: ${{ secrets.DB_NAME }}
       DB_USER: ${{ secrets.DB_USER }}
       DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      # STATIC FILES
       STATIC_AZURE_ACCOUNT_NAME: ${{ secrets.STATIC_AZURE_ACCOUNT_NAME }}
       STATIC_AZURE_ACCOUNT_KEY: ${{ secrets.STATIC_AZURE_ACCOUNT_KEY }}
-      STATIC_AZURE_ACCOUNT_KEY: ${{ secrets.HOSTS }}
+      # ALLOWED HOSTS / TRUSTED DOMAINS
+      HOSTS: ${{ secrets.HOSTS }}
 
     steps:
       - uses: actions/checkout@v2
@@ -84,6 +87,7 @@ jobs:
           # slot-name: 'staging'
           app-settings-json: '[
               { "name": "SCM_DO_BUILD_DURING_DEPLOYMENT", "value": "1", "slotSetting": false },
+              { "name": "WEBSITE_ENABLE_SYNC_UPDATE_SITE", "value": "1", "slotSetting": false },
               { "name": "SECRET_KEY", "value": "${{ secrets.SECRET_KEY }}", "slotSetting": false },
               { "name": "DB_SERVER", "value": "${{ secrets.DB_SERVER }}", "slotSetting": false },
               { "name": "DB_NAME", "value": "${{ secrets.DB_NAME }}", "slotSetting": false },
@@ -91,8 +95,7 @@ jobs:
               { "name": "DB_PASSWORD", "value": "${{ secrets.DB_PASSWORD }}", "slotSetting": false },
               { "name": "STATIC_AZURE_ACCOUNT_NAME", "value": "${{ secrets.STATIC_AZURE_ACCOUNT_NAME }}", "slotSetting": false },
               { "name": "STATIC_AZURE_ACCOUNT_KEY", "value": "${{ secrets.STATIC_AZURE_ACCOUNT_KEY }}", "slotSetting": false },
-              { "name": "WEBSITE_ENABLE_SYNC_UPDATE_SITE", "value": "${{ secrets.HOSTS }}", "slotSetting": false },
-              { "name": "HOSTS", "value": "1", "slotSetting": false }
+              { "name": "HOSTS", "value": ${{ secrets.HOSTS }}, "slotSetting": false }
               ]'
         id: settings
       
