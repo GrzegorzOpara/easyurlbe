@@ -28,7 +28,6 @@ jobs:
         with:
           resourceGroup: ${{ secrets.RESOURCE_GROUP }}
           appConfigurationName: ${{ secrets.APP_CONFIGURATION }}
-          keyFilter: 'easyurl-fe*'
       
-      - run: echo ${{ steps.get-app-configuration.outputs.easyurlfe-FE_WEB_APP_URL}}
+      - run: echo ${{ steps.get-app-configuration.outputs}}
       
