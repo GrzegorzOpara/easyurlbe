@@ -39,6 +39,13 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+      - name: Azure CLI script
+      uses: azure/CLI@v1
+      with:
+        inlineScript: |
+          az account show
+          az storage -h
+
       - uses: flcdrg/get-azure-app-configuration-action@v2
         id: get-app-configuration
         with:
