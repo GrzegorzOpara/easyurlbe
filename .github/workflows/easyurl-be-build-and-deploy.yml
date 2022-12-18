@@ -16,8 +16,8 @@ jobs:
     env:
       # DJANGO
 
-      DJANGO_SECRET_KEY: ${{ secrets.SECRET_KEY }}
-      DJANGO_DEBUG: ${{ secrets.DEBUG }}
+      DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+      DJANGO_DEBUG: ${{ secrets.DJANGO_DEBUG }}
 
       # DB
       DB_SERVER: ${{ secrets.DB_SERVER }}
@@ -56,9 +56,7 @@ jobs:
       # We add collectstatic to take care of our static files during the Actions run
       # This is not added by default in the generated template, so we include this ourselves
       - name: Collect static
-        run: |
-          echo $DB_SERVER
-          python manage.py collectstatic --noinput
+        run: python manage.py collectstatic --noinput
 
       # We add makemigrations and migrate to run our model/database migrations
       # This is not added by default in the generated template, so we include this ourselves
@@ -99,10 +97,10 @@ jobs:
           mask-inputs: true
           # slot-name: 'staging'
           app-settings-json: '[
-              { "name": "DJANGO_DEBUG", "value": "${{ secrets.DEBUG }}", "slotSetting": false },
-              { "name": "DJANGO_SECRET_KEY", "value": "${{ secrets.SECRET_KEY }}", "slotSetting": false },
-              { "name": "DJANGO_HOSTS", "value": "${{ secrets.HOSTS }}", "slotSetting": false },
-              { "name": "DJANGO_CSRF_TRUSTED_ORIGINS", "value": "${{ secrets.CSRF_TRUSTED_ORIGINS }}", "slotSetting": false }
+              { "name": "DJANGO_DEBUG", "value": "${{ secrets.DJANGO_DEBUG }}", "slotSetting": false },
+              { "name": "DJANGO_SECRET_KEY", "value": "${{ secrets.DJANGO_SECRET_KEY }}", "slotSetting": false },
+              { "name": "DJANGO_HOSTS", "value": "${{ secrets.DJANGO_HOSTS }}", "slotSetting": false },
+              { "name": "DJANGO_CSRF_TRUSTED_ORIGINS", "value": "${{ secrets.DJANGO_CSRF_TRUSTED_ORIGINS }}", "slotSetting": false }
               { "name": "DB_SERVER", "value": "${{ secrets.DB_SERVER }}", "slotSetting": false },
               { "name": "DB_NAME", "value": "${{ secrets.DB_NAME }}", "slotSetting": false },
               { "name": "DB_USER", "value": "${{ secrets.DB_USER }}", "slotSetting": false },
