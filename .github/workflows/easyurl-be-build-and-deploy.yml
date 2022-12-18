@@ -16,21 +16,21 @@ jobs:
     environment:
       name: 'Production'
 
-    env:
-      # # DJANGO
-      # SECRET_KEY: ${{ secrets.SECRET_KEY }}
-      # DEBUG: ${{ secrets.DEBUG }}
-      # # DB
-      # DB_SERVER: ${{ secrets.DB_SERVER }}
-      # DB_NAME: ${{ secrets.DB_NAME }}
-      # DB_USER: ${{ secrets.DB_USER }}
-      # DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-      # # STATIC FILES
-      # STATIC_AZURE_ACCOUNT_NAME: ${{ secrets.STATIC_AZURE_ACCOUNT_NAME }}
-      # STATIC_AZURE_ACCOUNT_KEY: ${{ secrets.STATIC_AZURE_ACCOUNT_KEY }}
-      # # ALLOWED HOSTS / TRUSTED DOMAINS
-      # HOSTS: ${{ secrets.HOSTS }}
-      # CSRF_TRUSTED_ORIGINS: ${{ secrets.CSRF_TRUSTED_ORIGINS }}
+    # env:
+    #   # # DJANGO
+    #   # SECRET_KEY: ${{ secrets.SECRET_KEY }}
+    #   # DEBUG: ${{ secrets.DEBUG }}
+    #   # # DB
+    #   # DB_SERVER: ${{ secrets.DB_SERVER }}
+    #   # DB_NAME: ${{ secrets.DB_NAME }}
+    #   # DB_USER: ${{ secrets.DB_USER }}
+    #   # DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+    #   # # STATIC FILES
+    #   # STATIC_AZURE_ACCOUNT_NAME: ${{ secrets.STATIC_AZURE_ACCOUNT_NAME }}
+    #   # STATIC_AZURE_ACCOUNT_KEY: ${{ secrets.STATIC_AZURE_ACCOUNT_KEY }}
+    #   # # ALLOWED HOSTS / TRUSTED DOMAINS
+    #   # HOSTS: ${{ secrets.HOSTS }}
+    #   # CSRF_TRUSTED_ORIGINS: ${{ secrets.CSRF_TRUSTED_ORIGINS }}
 
     steps:
       - uses: actions/checkout@v2
