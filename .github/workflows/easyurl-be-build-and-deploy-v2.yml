@@ -16,8 +16,8 @@ jobs:
     environment:
       name: 'Production'
     env:
-      $SECRET_SANTA = "NIE MA MNIE"
-      $SANTA = "JESTEM"
+      SECRET_SANTA = NIE_MA_MNIE
+      SANTA = JESTEM
 
     steps:
       
