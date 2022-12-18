@@ -30,7 +30,7 @@ jobs:
       
       - run: |
           echo '::add-mask::$easyurlfe-FE_WEB_APP_URL'
-          echo '::add-mask::$env'
+          echo '::add-mask::$env.SECRET_SANTA'
 
       - uses: flcdrg/get-azure-app-configuration-action@v2
         id: get-app-configuration
