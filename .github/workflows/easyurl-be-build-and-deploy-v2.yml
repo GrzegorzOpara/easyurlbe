@@ -15,9 +15,6 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: 'Production'
-    env:
-      SECRET_SANTA: NIE_MA_MNIE
-      SANTA: JESTEM
 
     steps:
       
@@ -28,10 +25,6 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
       
-      - run: |
-          echo '::add-mask::$easyurlfe-FE_WEB_APP_URL'
-          echo '::add-mask::$env.SECRET_SANTA'
-
       - uses: flcdrg/get-azure-app-configuration-action@v2
         id: get-app-configuration
         with:
@@ -39,5 +32,9 @@ jobs:
           appConfigurationName: ${{ secrets.GB_APP_CONFIGURATION_NAME }}
           keyFilter: "easyurlfe-FE_WEB_APP_URL"
 
-      - run: echo "${{ steps.get-app-configuration.outputs.easyurlfe-FE_WEB_APP_URL }}"
+      - run: |
+          echo '::add-mask::$easyurlfe-FE_WEB_APP_URL'
+
+      - run: echo "${{ $easyurlfe-FE_WEB_APP_URL }}"
+      - run: echo "Test!"
       
