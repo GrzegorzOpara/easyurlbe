@@ -31,10 +31,8 @@ jobs:
           resourceGroup: ${{ secrets.GB_APP_CONFIGURATION_RG }}
           appConfigurationName: ${{ secrets.GB_APP_CONFIGURATION_NAME }}
           keyFilter: "easyurlfe-FE_WEB_APP_URL"
-
-      - run: |
-          echo "::add-mask::$easyurlfe-FE_WEB_APP_URL" 
-          echo "easyurlfe-FE_WEB_APP_URL=$easyurlfe-FE_WEB_APP_URL" >> $GITHUB_ENV
+        echo "::add-mask::$easyurlfe-FE_WEB_APP_URL"
+        echo easyurlfe-FE_WEB_APP_URL=$easyurlfe-FE_WEB_APP_URL >> $GITHUB_ENV
 
       - run: echo "Test!"
       
