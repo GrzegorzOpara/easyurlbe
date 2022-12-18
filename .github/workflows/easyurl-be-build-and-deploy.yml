@@ -42,8 +42,8 @@ jobs:
       - uses: flcdrg/get-azure-app-configuration-action@v2
         id: get-app-configuration
         with:
-          resourceGroup: ${{ secrets.APP_CONFIGURATION_RG }}
-          appConfigurationName: ${{ secrets.APP_CONFIGURATION_NAME }}
+          resourceGroup: ${{ secrets.GB_APP_CONFIGURATION_RG }}
+          appConfigurationName: ${{ secrets.GB_APP_CONFIGURATION_NAME }}
           keyFilter: "easyurlfe-FE_WEB_APP_URL"
 
       - name: Set up Python version
