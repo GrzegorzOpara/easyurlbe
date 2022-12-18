@@ -31,7 +31,7 @@ jobs:
 
       # ALLOWED HOSTS / TRUSTED DOMAINS
       DJANGO_HOSTS: ${{ secrets.HOSTS }}
-      DJANGO_CSRF_TRUSTED_ORIGINS: ${{ secrets.CSRF_TRUSTED_ORIGINS }}
+      DJANGO_CSRF_TRUSTED_ORIGINS: ${{ secrets.DJANGO_CSRF_TRUSTED_ORIGINS }}
 
     steps:
       - uses: actions/checkout@v2
