@@ -17,23 +17,34 @@ jobs:
       name: 'Production'
 
     env:
-      # DJANGO
-      SECRET_KEY: ${{ secrets.SECRET_KEY }}
-      DEBUG: ${{ secrets.DEBUG }}
-      # DB
-      DB_SERVER: ${{ secrets.DB_SERVER }}
-      DB_NAME: ${{ secrets.DB_NAME }}
-      DB_USER: ${{ secrets.DB_USER }}
-      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-      # STATIC FILES
-      STATIC_AZURE_ACCOUNT_NAME: ${{ secrets.STATIC_AZURE_ACCOUNT_NAME }}
-      STATIC_AZURE_ACCOUNT_KEY: ${{ secrets.STATIC_AZURE_ACCOUNT_KEY }}
-      # ALLOWED HOSTS / TRUSTED DOMAINS
-      HOSTS: ${{ secrets.HOSTS }}
-      CSRF_TRUSTED_ORIGINS: ${{ secrets.CSRF_TRUSTED_ORIGINS }}
+      # # DJANGO
+      # SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      # DEBUG: ${{ secrets.DEBUG }}
+      # # DB
+      # DB_SERVER: ${{ secrets.DB_SERVER }}
+      # DB_NAME: ${{ secrets.DB_NAME }}
+      # DB_USER: ${{ secrets.DB_USER }}
+      # DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      # # STATIC FILES
+      # STATIC_AZURE_ACCOUNT_NAME: ${{ secrets.STATIC_AZURE_ACCOUNT_NAME }}
+      # STATIC_AZURE_ACCOUNT_KEY: ${{ secrets.STATIC_AZURE_ACCOUNT_KEY }}
+      # # ALLOWED HOSTS / TRUSTED DOMAINS
+      # HOSTS: ${{ secrets.HOSTS }}
+      # CSRF_TRUSTED_ORIGINS: ${{ secrets.CSRF_TRUSTED_ORIGINS }}
 
     steps:
       - uses: actions/checkout@v2
+
+      - uses: Azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - uses: flcdrg/get-azure-app-configuration-action@v2
+        id: get-app-configuration
+        with:
+          resourceGroup: ${{ secrets.APP_CONFIGURATION_RG }}
+          appConfigurationName: ${{ secrets.APP_CONFIGURATION_NAME }}
+          keyFilter: "easyurlfe-FE_WEB_APP_URL"
 
       - name: Set up Python version
         uses: actions/setup-python@v1
@@ -67,6 +78,10 @@ jobs:
           path: |
             . 
             !venv/
+      
+      - name: Azure Loout
+        run: |
+          az logout
 
   deploy:
     runs-on: ubuntu-latest
@@ -81,27 +96,27 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
       
-      - name: Set up app service settings
-        uses: azure/appservice-settings@v1
-        with:
-          app-name: 'webapp-easyurl-be-prod'
-          mask-inputs: true
-          # slot-name: 'staging'
-          app-settings-json: '[
-              { "name": "DEBUG", "value": "${{ secrets.DEBUG }}", "slotSetting": false },
-              { "name": "SCM_DO_BUILD_DURING_DEPLOYMENT", "value": "1", "slotSetting": false },
-              { "name": "WEBSITE_ENABLE_SYNC_UPDATE_SITE", "value": "1", "slotSetting": false },
-              { "name": "SECRET_KEY", "value": "${{ secrets.SECRET_KEY }}", "slotSetting": false },
-              { "name": "DB_SERVER", "value": "${{ secrets.DB_SERVER }}", "slotSetting": false },
-              { "name": "DB_NAME", "value": "${{ secrets.DB_NAME }}", "slotSetting": false },
-              { "name": "DB_USER", "value": "${{ secrets.DB_USER }}", "slotSetting": false },
-              { "name": "DB_PASSWORD", "value": "${{ secrets.DB_PASSWORD }}", "slotSetting": false },
-              { "name": "STATIC_AZURE_ACCOUNT_NAME", "value": "${{ secrets.STATIC_AZURE_ACCOUNT_NAME }}", "slotSetting": false },
-              { "name": "STATIC_AZURE_ACCOUNT_KEY", "value": "${{ secrets.STATIC_AZURE_ACCOUNT_KEY }}", "slotSetting": false },
-              { "name": "HOSTS", "value": "${{ secrets.HOSTS }}", "slotSetting": false },
-              { "name": "CSRF_TRUSTED_ORIGINS", "value": "${{ secrets.CSRF_TRUSTED_ORIGINS }}", "slotSetting": false }
-              ]'
-        id: settings
+      # - name: Set up app service settings
+      #   uses: azure/appservice-settings@v1
+      #   with:
+      #     app-name: 'webapp-easyurl-be-prod'
+      #     mask-inputs: true
+      #     # slot-name: 'staging'
+      #     app-settings-json: '[
+      #         { "name": "DEBUG", "value": "${{ secrets.DEBUG }}", "slotSetting": false },
+      #         { "name": "SCM_DO_BUILD_DURING_DEPLOYMENT", "value": "1", "slotSetting": false },
+      #         { "name": "WEBSITE_ENABLE_SYNC_UPDATE_SITE", "value": "1", "slotSetting": false },
+      #         { "name": "SECRET_KEY", "value": "${{ secrets.SECRET_KEY }}", "slotSetting": false },
+      #         { "name": "DB_SERVER", "value": "${{ secrets.DB_SERVER }}", "slotSetting": false },
+      #         { "name": "DB_NAME", "value": "${{ secrets.DB_NAME }}", "slotSetting": false },
+      #         { "name": "DB_USER", "value": "${{ secrets.DB_USER }}", "slotSetting": false },
+      #         { "name": "DB_PASSWORD", "value": "${{ secrets.DB_PASSWORD }}", "slotSetting": false },
+      #         { "name": "STATIC_AZURE_ACCOUNT_NAME", "value": "${{ secrets.STATIC_AZURE_ACCOUNT_NAME }}", "slotSetting": false },
+      #         { "name": "STATIC_AZURE_ACCOUNT_KEY", "value": "${{ secrets.STATIC_AZURE_ACCOUNT_KEY }}", "slotSetting": false },
+      #         { "name": "HOSTS", "value": "${{ secrets.HOSTS }}", "slotSetting": false },
+      #         { "name": "CSRF_TRUSTED_ORIGINS", "value": "${{ secrets.CSRF_TRUSTED_ORIGINS }}", "slotSetting": false }
+      #         ]'
+      #   id: settings
       
       - name: Download artifact from build job
         uses: actions/download-artifact@v2

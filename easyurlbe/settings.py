@@ -25,13 +25,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = os.getenv('easyurlbe-SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG')
+DEBUG = os.getenv('easyurlbe-DEBUG')
 
-ALLOWED_HOSTS = os.environ.get('HOSTS').split(' ')
-CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED_ORIGINS').split(' ')
+ALLOWED_HOSTS = os.environ.get('easyurlbe-HOSTS').split(' ')
+CSRF_TRUSTED_ORIGINS = os.environ.get('easyurlbe-CSRF_TRUSTED_ORIGINS').split(' ')
 
 
 # Application definition
@@ -64,7 +64,7 @@ SIMPLE_JWT = {
     'UPDATE_LAST_LOGIN': False,
 
     'ALGORITHM': 'HS256',
-    'SIGNING_KEY': os.getenv('SECRET_KEY'),
+    'SIGNING_KEY': os.getenv('easyurlbe-SECRET_KEY'),
     'VERIFYING_KEY': None,
     'AUDIENCE': None,
     'ISSUER': None,
@@ -142,10 +142,10 @@ WSGI_APPLICATION = 'easyurlbe.wsgi.application'
 DATABASES = {
         'default': {  
             'ENGINE': 'django.db.backends.mysql',  
-            'NAME': os.getenv("DB_NAME"),
-            'USER': os.getenv("DB_USER"),
-            'PASSWORD': os.getenv("DB_PASSWORD"),
-            'HOST': os.getenv("DB_SERVER"),
+            'NAME': os.getenv("easyurlbe-DB_NAME"),
+            'USER': os.getenv("easyurlbe-DB_USER"),
+            'PASSWORD': os.getenv("easyurlbe-DB_PASSWORD"),
+            'HOST': os.getenv("easyurlbe-DB_SERVER"),
             'PORT': '3306',  
             'OPTIONS': {  
                 'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"  
@@ -196,7 +196,7 @@ STATICFILES_STORAGE = 'backend.custom_azure.AzureStaticStorage'
 STATIC_LOCATION = "static"
 MEDIA_LOCATION = "media"
 
-AZURE_ACCOUNT_NAME = os.getenv('STATIC_AZURE_ACCOUNT_NAME')
+AZURE_ACCOUNT_NAME = os.getenv('easyurlbe-STATIC_AZURE_ACCOUNT_NAME')
 AZURE_CUSTOM_DOMAIN = f'{AZURE_ACCOUNT_NAME}.blob.core.windows.net'
 STATIC_URL = f'https://{AZURE_CUSTOM_DOMAIN}/{STATIC_LOCATION}/'
 MEDIA_URL = f'https://{AZURE_CUSTOM_DOMAIN}/{MEDIA_LOCATION}/'
