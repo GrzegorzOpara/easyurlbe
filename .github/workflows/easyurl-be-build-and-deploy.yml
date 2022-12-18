@@ -44,7 +44,7 @@ jobs:
         with:
           resourceGroup: ${{ secrets.GB_APP_CONFIGURATION_RG }}
           appConfigurationName: ${{ secrets.GB_APP_CONFIGURATION_NAME }}
-          keyFilter: "easyurlfe-FE_WEB_APP_URL"
+          # keyFilter: "easyurlfe-FE_WEB_APP_URL"
 
       - name: Set up Python version
         uses: actions/setup-python@v1
