@@ -33,8 +33,8 @@ jobs:
           keyFilter: "easyurlfe-FE_WEB_APP_URL"
 
       - run: |
-          echo '::add-mask::$easyurlfe-FE_WEB_APP_URL'
+          echo "::add-mask::$easyurlfe-FE_WEB_APP_URL" 
+          echo "easyurlfe-FE_WEB_APP_URL=$easyurlfe-FE_WEB_APP_URL" >> $GITHUB_ENV
 
-      - run: echo "$easyurlfe-FE_WEB_APP_URL"
       - run: echo "Test!"
       
