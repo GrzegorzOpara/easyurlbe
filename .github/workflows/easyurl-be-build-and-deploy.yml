@@ -97,7 +97,7 @@ jobs:
               { "name": "DJANGO_DEBUG", "value": "${{ secrets.DJANGO_DEBUG }}", "slotSetting": false },
               { "name": "DJANGO_SECRET_KEY", "value": "${{ secrets.DJANGO_SECRET_KEY }}", "slotSetting": false },
               { "name": "DJANGO_HOSTS", "value": "${{ secrets.DJANGO_HOSTS }}", "slotSetting": false },
-              { "name": "DJANGO_CSRF_TRUSTED_ORIGINS", "value": "${{ secrets.DJANGO_CSRF_TRUSTED_ORIGINS }}", "slotSetting": false }
+              { "name": "DJANGO_CSRF_TRUSTED_ORIGINS", "value": "${{ secrets.DJANGO_CSRF_TRUSTED_ORIGINS }}", "slotSetting": false },
               { "name": "DB_SERVER", "value": "${{ secrets.DB_SERVER }}", "slotSetting": false },
               { "name": "DB_NAME", "value": "${{ secrets.DB_NAME }}", "slotSetting": false },
               { "name": "DB_USER", "value": "${{ secrets.DB_USER }}", "slotSetting": false },
