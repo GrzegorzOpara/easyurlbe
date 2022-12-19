@@ -32,8 +32,8 @@ DEBUG = os.getenv('DJANGO_DEBUG')
 
 ALLOWED_HOSTS = os.environ.get('DJANGO_HOSTS').split(' ')
 CSRF_TRUSTED_ORIGINS = os.environ.get('DJANGO_CSRF_TRUSTED_ORIGINS').split(' ')
-
-
+CORS_ALLOW_ALL_ORIGINS = False
+CORS_ALLOWED_ORIGINS = os.environ.get('DJANGO_CORS_ALLOWED_ORIGINS').split(' ')
 # Application definition
 
 INSTALLED_APPS = [
@@ -54,7 +54,6 @@ INSTALLED_APPS = [
     'api',
 ]
 
-CORS_ALLOW_ALL_ORIGINS = True # testing
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
