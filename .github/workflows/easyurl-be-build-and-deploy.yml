@@ -32,6 +32,7 @@ jobs:
       # ALLOWED HOSTS / TRUSTED DOMAINS
       DJANGO_HOSTS: ${{ secrets.HOSTS }}
       DJANGO_CSRF_TRUSTED_ORIGINS: ${{ secrets.DJANGO_CSRF_TRUSTED_ORIGINS }}
+      DJANGO_CORS_ALLOWED_ORIGINS: ${{ secrets.DJANGO_CORS_ALLOWED_ORIGINS }} "http://localhost http://127.0.0.1 http://localhost:3000 http://127.0.0.1:3000"
 
     steps:
       - uses: actions/checkout@v2
@@ -98,6 +99,7 @@ jobs:
               { "name": "DJANGO_SECRET_KEY", "value": "${{ secrets.DJANGO_SECRET_KEY }}", "slotSetting": false },
               { "name": "DJANGO_HOSTS", "value": "${{ secrets.DJANGO_HOSTS }}", "slotSetting": false },
               { "name": "DJANGO_CSRF_TRUSTED_ORIGINS", "value": "${{ secrets.DJANGO_CSRF_TRUSTED_ORIGINS }}", "slotSetting": false },
+              { "name": "DJANGO_CORS_ALLOWED_ORIGINS", "value": "${{ secrets.DJANGO_CORS_ALLOWED_ORIGINS }}", "slotSetting": false },
               { "name": "DB_SERVER", "value": "${{ secrets.DB_SERVER }}", "slotSetting": false },
               { "name": "DB_NAME", "value": "${{ secrets.DB_NAME }}", "slotSetting": false },
               { "name": "DB_USER", "value": "${{ secrets.DB_USER }}", "slotSetting": false },
