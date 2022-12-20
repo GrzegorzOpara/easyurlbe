@@ -147,7 +147,8 @@ DATABASES = {
             'HOST': os.getenv("DB_SERVER"),
             'PORT': '3306',  
             'OPTIONS': {  
-                'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"  
+                'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+                'ssl': {'ca': 'DigiCertGlobalRootCA.crt.pem'}
             }  
         }
     }
