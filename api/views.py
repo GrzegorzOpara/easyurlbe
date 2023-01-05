@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.contrib.auth import get_user
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -44,6 +45,20 @@ class UserListView(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)  
         else:
             return Response(status=status.HTTP_201_CREATED)
+
+class UserDetailedView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def delete(self, request, *args, **kwargs):
+        
+        try:
+            user = request.user
+            user.delete()
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)  
+        else:
+            return Response(status=status.HTTP_200_OK)
+        
 
 class UrlListView(APIView):
     
