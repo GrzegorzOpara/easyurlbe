@@ -59,6 +59,19 @@ class UserDetailedView(APIView):
         else:
             return Response(status=status.HTTP_200_OK)
         
+class UserPasswordChangeView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        
+        try:
+            user = request.user
+            user.set_password(request.data.get('password'))
+            user.save()
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)  
+        else:
+            return Response(status=status.HTTP_200_OK)
 
 class UrlListView(APIView):
     
