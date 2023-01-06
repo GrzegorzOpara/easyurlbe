@@ -33,6 +33,9 @@ class UserListView(APIView):
         {"username":"test","email":"test@test.com","password":"zaq1@WSX"}
         '''
         try:
+            if len(User.objects.all().filter(username=request.data.get('username'))) > 0:
+                raise Exception("This user alrady exists!") 
+
             new_entry = {
                 'username': request.data.get('username'),
                 'email': request.data.get('email'),
