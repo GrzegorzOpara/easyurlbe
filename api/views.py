@@ -1,11 +1,80 @@
 from django.shortcuts import render
+from django.contrib.auth import get_user
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import permissions
 from django.db.models import Q
-from .models import UrlEntry
-from .serializers import UrlEntrySerializer
+from .models import UrlEntry, User
+from .serializers import UrlEntrySerializer, UserGetEntrySerializer
+
+
+class UserListView(APIView):
+    permission_classes = [permissions.AllowAny]
+    
+    def get(self, request, *args, **kwargs):
+
+        '''
+        List all username for given requested user
+        then it's possible to further filter out results basing on the optional query paramater
+        '''      
+        try:
+            query = '' if request.GET.get('query') == None else request.GET.get('query')
+            usernames = User.objects.all().filter(Q(username=query))
+            serializer = UserGetEntrySerializer(usernames, many=True)
+        except:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request, *args, **kwargs):
+        '''
+        Creates new user entry
+        {"username":"test","email":"test@test.com","password":"zaq1@WSX"}
+        '''
+        try:
+            if len(User.objects.all().filter(username=request.data.get('username'))) > 0:
+                raise Exception("This user alrady exists!") 
+
+            new_entry = {
+                'username': request.data.get('username'),
+                'email': request.data.get('email'),
+                'password': request.data.get('password')
+            }
+
+            user = User.objects.create_user(username=new_entry["username"], email=new_entry["email"], password=new_entry["password"])   
+            user.save
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)  
+        else:
+            return Response(status=status.HTTP_201_CREATED)
+
+class UserDetailedView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def delete(self, request, *args, **kwargs):
+        
+        try:
+            user = request.user
+            user.delete()
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)  
+        else:
+            return Response(status=status.HTTP_200_OK)
+        
+class UserPasswordChangeView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        
+        try:
+            user = request.user
+            user.set_password(request.data.get('password'))
+            user.save()
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)  
+        else:
+            return Response(status=status.HTTP_200_OK)
 
 class UrlListView(APIView):
     
@@ -22,8 +91,7 @@ class UrlListView(APIView):
         urls = UrlEntry.objects.filter(user = request.user.id).filter(Q(url_name__icontains=query) | Q(url_desc__icontains=query))
         serializer = UrlEntrySerializer(urls, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-        
-
+           
     def post(self, request, *args, **kwargs):
         '''
         Creates new url entry for specific user
