@@ -2,11 +2,15 @@ from django.shortcuts import render
 from django.contrib.auth import get_user
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
-from rest_framework import permissions
+from rest_framework import status, permissions, viewsets, generics, status
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from django.conf import settings
+from django.urls import reverse
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
 from django.db.models import Q
 from .models import UrlEntry, User
-from .serializers import UrlEntrySerializer, UserGetEntrySerializer
+from .serializers import UrlEntrySerializer, UserGetEntrySerializer, EmailSerializer, ResetPasswordSerializer
 
 
 class UserListView(APIView):
@@ -168,3 +172,63 @@ class UrlDetailView(APIView):
             )
         url_entry.delete()
         return Response({"res": "Object deleted!"}, status=status.HTTP_200_OK)
+
+class PasswordReset(APIView):
+    """
+    Request for Password Reset Link.
+    """
+
+    serializer_class = EmailSerializer
+
+    def post(self, request):
+        """
+        Create token.
+        """
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        email = serializer.data["email"]
+        user = User.objects.filter(email=email).first()
+        if user:
+            encoded_pk = urlsafe_base64_encode(force_bytes(user.pk))
+            token = PasswordResetTokenGenerator().make_token(user)
+            reset_url = reverse(
+                "reset-password",
+                kwargs={"encoded_pk": encoded_pk, "token": token},
+            )
+            reset_link = f"localhost:8000{reset_url}"
+
+            # send the rest_link as mail to the user.
+
+            return Response(
+                {
+                    "message": 
+                    f"Your password rest link: {reset_link}"
+                },
+                status=status.HTTP_200_OK,
+            )
+        else:
+            return Response(
+                {"message": "User doesn't exists"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+
+class ResetPassword(APIView):
+    """
+    Verify and Reset Password Token View.
+    """
+
+    serializer_class = ResetPasswordSerializer
+
+    def patch(self, request, *args, **kwargs):
+        """
+        Verify token & encoded_pk and then reset the password.
+        """
+        serializer = self.serializer_class(
+            data=request.data, context={"kwargs": kwargs}
+        )
+        serializer.is_valid(raise_exception=True)
+        return Response(
+            {"message": "Password reset complete"},
+            status=status.HTTP_200_OK,
+        )
