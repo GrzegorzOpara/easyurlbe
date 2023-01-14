@@ -174,13 +174,15 @@ class UrlDetailView(APIView):
         return Response({"res": "Object deleted!"}, status=status.HTTP_200_OK)
 
 class PasswordReset(APIView):
+    permission_classes = [permissions.AllowAny]
+
     """
     Request for Password Reset Link.
     """
 
     serializer_class = EmailSerializer
 
-    def post(self, request):
+    def post(self, request):    
         """
         Create token.
         """
@@ -192,7 +194,7 @@ class PasswordReset(APIView):
             encoded_pk = urlsafe_base64_encode(force_bytes(user.pk))
             token = PasswordResetTokenGenerator().make_token(user)
             reset_url = reverse(
-                "reset-password",
+                "password-reset",
                 kwargs={"encoded_pk": encoded_pk, "token": token},
             )
             reset_link = f"localhost:8000{reset_url}"
@@ -217,6 +219,7 @@ class ResetPassword(APIView):
     """
     Verify and Reset Password Token View.
     """
+    permission_classes = [permissions.AllowAny]
 
     serializer_class = ResetPasswordSerializer
 
