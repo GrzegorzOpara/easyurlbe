@@ -204,3 +204,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Frontend address - to generate valid password reset link
 FE_URL = os.getenv('FE_URL')
+
+# SMTP
+SMTP_API_KEY = os.getenv('SMTP_API_KEY')

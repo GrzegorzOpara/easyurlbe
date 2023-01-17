@@ -11,6 +11,8 @@ from django.utils.http import urlsafe_base64_encode
 from django.db.models import Q
 from .models import UrlEntry, User
 from .serializers import UrlEntrySerializer, UserGetEntrySerializer, EmailSerializer, ResetPasswordSerializer
+from .smtp import sendEmail
+import json
 
 class UserListView(APIView):
     permission_classes = [permissions.AllowAny]
@@ -192,25 +194,22 @@ class PasswordReset(APIView):
         if user:
             encoded_pk = urlsafe_base64_encode(force_bytes(user.pk))
             token = PasswordResetTokenGenerator().make_token(user)
-            reset_url = reverse(
-                "password-reset",
-                kwargs={"encoded_pk": encoded_pk, "token": token},
-            )
-            reset_link = f"{settings.FE_URL}{reset_url}"
+            # reset_url =  reverse(
+            #     "password-reset",
+            #     kwargs={"encoded_pk": encoded_pk, "token": token},
+            # )
+            reset_link = f"{settings.FE_URL}/password-change/{encoded_pk}/{token}"
 
-            # send the rest_link as mail to the user.
-
-            return Response(
-                {
-                    "message": 
-                    f"Your password rest link: {reset_link}"
-                },
-                status=status.HTTP_200_OK,
-            )
+            smtp_response = sendEmail(email, 1, reset_link)
+            
+            if (smtp_response.message_id):
+                return Response({"message": f"Email successfully sent, id: {smtp_response.message_id}"}, status=status.HTTP_200_OK)
+            else:
+                return Response({"message": smtp_response}, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(
                 {"message": "User doesn't exists"},
-                status=status.HTTP_400_BAD_REQUEST,
+                status=status.HTTP_400_BAD_REQUEST
             )
 
 
