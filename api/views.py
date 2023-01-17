@@ -12,7 +12,6 @@ from django.db.models import Q
 from .models import UrlEntry, User
 from .serializers import UrlEntrySerializer, UserGetEntrySerializer, EmailSerializer, ResetPasswordSerializer
 
-
 class UserListView(APIView):
     permission_classes = [permissions.AllowAny]
     
@@ -197,7 +196,7 @@ class PasswordReset(APIView):
                 "password-reset",
                 kwargs={"encoded_pk": encoded_pk, "token": token},
             )
-            reset_link = f"localhost:8000{reset_url}"
+            reset_link = f"{settings.FE_URL}{reset_url}"
 
             # send the rest_link as mail to the user.
 
