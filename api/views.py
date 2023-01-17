@@ -2,12 +2,17 @@ from django.shortcuts import render
 from django.contrib.auth import get_user
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
-from rest_framework import permissions
+from rest_framework import status, permissions, viewsets, generics, status
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from django.conf import settings
+from django.urls import reverse
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
 from django.db.models import Q
 from .models import UrlEntry, User
-from .serializers import UrlEntrySerializer, UserGetEntrySerializer
-
+from .serializers import UrlEntrySerializer, UserGetEntrySerializer, EmailSerializer, ResetPasswordSerializer
+from .smtp import sendEmail
+import json
 
 class UserListView(APIView):
     permission_classes = [permissions.AllowAny]
@@ -168,3 +173,63 @@ class UrlDetailView(APIView):
             )
         url_entry.delete()
         return Response({"res": "Object deleted!"}, status=status.HTTP_200_OK)
+
+class PasswordReset(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    """
+    Request for Password Reset Link.
+    """
+
+    serializer_class = EmailSerializer
+
+    def post(self, request):    
+        """
+        Create token.
+        """
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        email = serializer.data["email"]
+        user = User.objects.filter(email=email).first()
+        if user:
+            encoded_pk = urlsafe_base64_encode(force_bytes(user.pk))
+            token = PasswordResetTokenGenerator().make_token(user)
+            # reset_url =  reverse(
+            #     "password-reset",
+            #     kwargs={"encoded_pk": encoded_pk, "token": token},
+            # )
+            reset_link = f"{settings.FE_URL}/password-change/{encoded_pk}/{token}"
+
+            smtp_response = sendEmail(email, 1, reset_link)
+            
+            if (smtp_response.message_id):
+                return Response({"message": f"Email successfully sent, id: {smtp_response.message_id}"}, status=status.HTTP_200_OK)
+            else:
+                return Response({"message": smtp_response}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(
+                {"message": "User doesn't exists"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+
+class ResetPassword(APIView):
+    """
+    Verify and Reset Password Token View.
+    """
+    permission_classes = [permissions.AllowAny]
+
+    serializer_class = ResetPasswordSerializer
+
+    def patch(self, request, *args, **kwargs):
+        """
+        Verify token & encoded_pk and then reset the password.
+        """
+        serializer = self.serializer_class(
+            data=request.data, context={"kwargs": kwargs}
+        )
+        serializer.is_valid(raise_exception=True)
+        return Response(
+            {"message": "Password reset complete"},
+            status=status.HTTP_200_OK,
+        )

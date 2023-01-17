@@ -201,3 +201,9 @@ MEDIA_URL = f'https://{AZURE_CUSTOM_DOMAIN}/{MEDIA_LOCATION}/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Frontend address - to generate valid password reset link
+FE_URL = os.getenv('FE_URL')
+
+# SMTP
+SMTP_API_KEY = os.getenv('SMTP_API_KEY')

@@ -34,6 +34,12 @@ jobs:
       DJANGO_CSRF_TRUSTED_ORIGINS: ${{ secrets.DJANGO_CSRF_TRUSTED_ORIGINS }}
       DJANGO_CORS_ALLOWED_ORIGINS: ${{ secrets.DJANGO_CORS_ALLOWED_ORIGINS }}
 
+      # FE URL
+      FE_URL: ${{ secrets.FE_URL }}
+
+      # SMTP
+      SMTP_API_KEY: ${{ secrets.SMTP_API_KEY }}
+
     steps:
       - uses: actions/checkout@v2
 
@@ -104,6 +110,8 @@ jobs:
               { "name": "DB_NAME", "value": "${{ secrets.DB_NAME }}", "slotSetting": false },
               { "name": "DB_USER", "value": "${{ secrets.DB_USER }}", "slotSetting": false },
               { "name": "DB_PASSWORD", "value": "${{ secrets.DB_PASSWORD }}", "slotSetting": false },
+              { "name": "FE_URL", "value": "${{ secrets.FE_URL }}", "slotSetting": false },
+              { "name": "SMTP_API_KEY", "value": "${{ secrets.SMTP_API_KEY }}", "slotSetting": false },
               { "name": "STATIC_AZURE_ACCOUNT_NAME", "value": "${{ secrets.STATIC_AZURE_ACCOUNT_NAME }}", "slotSetting": false },
               { "name": "STATIC_AZURE_ACCOUNT_KEY", "value": "${{ secrets.STATIC_AZURE_ACCOUNT_KEY }}", "slotSetting": false },
               { "name": "WEBSITE_ENABLE_SYNC_UPDATE_SITE", "value": "1", "slotSetting": false },
