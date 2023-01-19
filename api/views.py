@@ -61,7 +61,19 @@ class UserDetailedView(APIView):
         
         try:
             user = request.user
-            user.delete()
+            print(user)
+            # user.delete()
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)  
+        else:
+            return Response(status=status.HTTP_200_OK)
+
+
+    def put(self, request, *args, **kwargs):
+        
+        try:
+            user = request.user
+            user.save()
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)  
         else:

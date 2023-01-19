@@ -11,7 +11,7 @@ from .views import (
 
 urlpatterns = [
     path('users/', UserListView.as_view()),
-    path('users/delete/', UserDetailedView.as_view()),
+    path('users/details/', UserDetailedView.as_view()),
     path('users/change-password/', UserPasswordChangeView.as_view()),
     path('users/request-password-reset/', PasswordReset.as_view(), name='request-password-reset'),
     path('users/password-reset/<str:encoded_pk>/<str:token>/', ResetPassword.as_view(), name='password-reset'),
