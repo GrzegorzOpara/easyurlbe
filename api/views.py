@@ -61,7 +61,6 @@ class UserDetailedView(APIView):
         
         try:
             user = request.user
-            print(user)
             # user.delete()
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)  
@@ -73,7 +72,14 @@ class UserDetailedView(APIView):
         
         try:
             user = request.user
-            user.save()
+
+            if list(request.data.keys())[0] == 'email':
+                pass # user.email = request.data['email']
+            
+            if list(request.data.keys())[0] == 'password':
+                pass # user.set_password = request.data['password']
+            
+            # user.save()
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)  
         else:
@@ -134,7 +140,7 @@ class UrlDetailView(APIView):
 
     def get_object(self, url_id, user_id):
         '''
-        Helper method to get the object with given todo_id, and user_id
+        Helper method to get the object with given url_id, and user_id
         '''
         try:
             return UrlEntry.objects.get(id=url_id, user = user_id)
@@ -143,7 +149,7 @@ class UrlDetailView(APIView):
 
     def get(self, request, url_id, *args, **kwargs):
         '''
-        Retrieves the Todo with given todo_id
+        Retrieves the Url with given url id
         '''
         url_entry = self.get_object(url_id, request.user.id)
         if not url_entry:
