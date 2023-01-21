@@ -57,11 +57,39 @@ class UserListView(APIView):
 class UserDetailedView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
+    def get(self, request, *args, **kwargs):
+        
+        try:
+            user = request.user
+            serializer = UserGetEntrySerializer(user, many=False)
+        except:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
     def delete(self, request, *args, **kwargs):
         
         try:
             user = request.user
             user.delete()
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)  
+        else:
+            return Response(status=status.HTTP_200_OK)
+
+
+    def put(self, request, *args, **kwargs):
+        
+        try:
+            user = request.user
+
+            if list(request.data.keys())[0] == 'email':
+                user.email = request.data['email']
+            
+            if list(request.data.keys())[0] == 'password':
+                user.set_password(request.data['password'])
+            
+            user.save()
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)  
         else:
@@ -90,31 +118,52 @@ class UrlListView(APIView):
         List all Url items for given requested user
         then it's possible to further filter out results basing on the optional query paramater
         '''      
-       
-        query = '' if request.GET.get('query') == None else request.GET.get('query')
+        try:
+            query = '' if request.GET.get('query') == None else request.GET.get('query')
 
-        urls = UrlEntry.objects.filter(user = request.user.id).filter(Q(url_name__icontains=query) | Q(url_desc__icontains=query))
-        serializer = UrlEntrySerializer(urls, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+            urls = UrlEntry.objects.filter(user = request.user.id).filter(Q(url_name__icontains=query) | Q(url_desc__icontains=query))
+            serializer = UrlEntrySerializer(urls, many=True)
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)          
+        else: 
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def delete(self, request, *args, **kwargs):
+        '''
+        List all Url items for given requested user and delete them
+        '''      
+        try:
+            urls = UrlEntry.objects.filter(user = request.user.id)
+            urls.delete()
+            
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)  
+        else:
+            return Response(status=status.HTTP_200_OK)
            
     def post(self, request, *args, **kwargs):
         '''
         Creates new url entry for specific user
         test: {"url_name":"wp.pl","url_link":"http://www.wp.pl","url_desc":"My favorite news portal"}
         '''
-        new_entry = {
-            'url_name': request.data.get('url_name'),
-            'url_link': request.data.get('url_link'),
-            'url_desc': request.data.get('url_desc'),
-            'user': request.user.id
-        }
+        try: 
+            new_entry = {
+                'url_name': request.data.get('url_name'),
+                'url_link': request.data.get('url_link'),
+                'url_desc': request.data.get('url_desc'),
+                'user': request.user.id
+            }
 
-        serializer = UrlEntrySerializer(data=new_entry)
-        if serializer.is_valid():
-            serializer.save()
+            serializer = UrlEntrySerializer(data=new_entry)
+            if serializer.is_valid():
+                serializer.save()
+            else:
+                raise Exception("Error adding new entry")
+                
+        except:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)  
+        else: 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UrlDetailView(APIView):
 
@@ -122,7 +171,7 @@ class UrlDetailView(APIView):
 
     def get_object(self, url_id, user_id):
         '''
-        Helper method to get the object with given todo_id, and user_id
+        Helper method to get the object with given url_id, and user_id
         '''
         try:
             return UrlEntry.objects.get(id=url_id, user = user_id)
@@ -131,7 +180,7 @@ class UrlDetailView(APIView):
 
     def get(self, request, url_id, *args, **kwargs):
         '''
-        Retrieves the Todo with given todo_id
+        Retrieves the Url with given url id
         '''
         url_entry = self.get_object(url_id, request.user.id)
         if not url_entry:
