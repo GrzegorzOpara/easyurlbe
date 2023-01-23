@@ -8,4 +8,5 @@ markdown
 djangorestframework-simplejwt
 datetime
 sib-api-v3-sdk
+Pillow
 django-storages[azure]
