@@ -10,7 +10,7 @@ from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.db.models import Q
 from .models import UrlEntry, User
-from .serializers import UrlEntrySerializer, UserGetEntrySerializer, EmailSerializer, ResetPasswordSerializer
+from .serializers import UrlEntrySerializer, UserSerializer, EmailSerializer, ResetPasswordSerializer
 from .smtp import sendEmail
 import json
 
@@ -26,7 +26,7 @@ class UserListView(APIView):
         try:
             query = '' if request.GET.get('query') == None else request.GET.get('query')
             usernames = User.objects.all().filter(Q(username=query))
-            serializer = UserGetEntrySerializer(usernames, many=True)
+            serializer = UserSerializer(usernames, many=True)
         except:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
@@ -61,7 +61,7 @@ class UserDetailedView(APIView):
         
         try:
             user = request.user
-            serializer = UserGetEntrySerializer(user, many=False)
+            serializer = UserSerializer(user, many=False)
         except:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:

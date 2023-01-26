@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import UrlEntry
+from .models import UrlEntry, Profile
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.http import urlsafe_base64_decode
 
@@ -9,10 +9,15 @@ class UrlEntrySerializer(serializers.ModelSerializer):
         model = UrlEntry
         fields = ['id', 'url_name', 'url_link', 'url_desc', 'user']
 
-class UserGetEntrySerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'username', 'email']
+
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model: Profile
+        fields = ['avatar_link']
 
 class EmailSerializer(serializers.Serializer):
     """
